@@ -31,7 +31,7 @@ def user(name):
 #trim
 #striptags
 
-# create Custom error pages
+# create Custom error pages skldks
 
 # 1) invalid URL
 @app.errorhandler(404)
