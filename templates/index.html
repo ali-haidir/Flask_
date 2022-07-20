@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>"codemy lecture 1"</title>
+  </head>
+  <body>
+    <h1>hello world!!!</h1>
+    <p>this is my first webpage</p>
+    <p>my name is {{name}}</p>
+    <p>{{stuff|safe}}</p>
+    <p>{{stuff|striptags}}</p>
+    <p>{{stuff|title}}</p>
+    <p>{{ favorate_pizza }}</p>
+
+    <h3>Favorate Pizza!!</h3>
+    {% for toppings in favorate_pizza %}
+      {{toppings}}</br>
+    {% endfor %}
+
+    <br><br>
+    {{favorate_pizza.0}}<br>
+    {{favorate_pizza.2}}<br>
+    {{favorate_pizza.3}}<br>
+    {{favorate_pizza.3 +10}}<br>
+    {{favorate_pizza[1]}}
+<br><br><br>
+    {% for top in favorate_pizza %}
+    {% if top == 44 %}
+      {{top +100}}<br>
+    {% else %}
+        {{top}}<br>
+
+    {% endif %}
+
+    {% endfor %}
+
+    <br><br>
+
+{{favorate_pizza.0|reverse}}<br>
+{{favorate_pizza|reverse}}
+
+
+  </body>
+</html>
