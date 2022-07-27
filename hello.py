@@ -10,10 +10,16 @@ from flask_login import UserMixin,login_user,LoginManager,login_required,logout_
 from webforms import *
 # from webforms import UserForm,NamerForm,PostForm,PasswordForm,LoginForm,SearchForm
 
+# importing flask ck editor
+from flask_ckeditor import CKEditor
+
+
 
 #create a flask instance
 
 app = Flask(__name__)
+#add ckeditor instance
+ckeditor = CKEditor(app)
 # Add Database
 con = 'mysql+mysqlconnector://root:mypass123@localhost/users'
 app.config['SQLALCHEMY_DATABASE_URI'] = con
@@ -93,6 +99,19 @@ class Users(db.Model,UserMixin):
 # @app.route('/')
 # def index():
 #     return "<h1>Hello world from codemy! </h1>"
+
+#creating an admin area
+@app.route('/admin')
+@login_required
+def admin():
+    id = current_user.id
+    if id == 20:
+        return render_template("admin.html")
+    else:
+        flash("you are not the admin so cant access this page ")
+        return redirect(url_for('dashboard'))
+
+
 
 #add stuff to the navbar
 @app.context_processor

@@ -20,7 +20,7 @@ Hey {{name}}!! {{message}}
       {{ form.title.label(class = "form-label") }}
       {{ form.title(class="form-control") }}
       <br>
-      
+
 
       {{ form.slug.label(class = "form-label") }}
       {{ form.slug(class="form-control") }}
@@ -33,6 +33,10 @@ Hey {{name}}!! {{message}}
       {{ form.submit(class="btn btn-primary") }}
 
     </form>
+    <!-- #load the ck editor here -->
+    {{ ckeditor.load() }}
+    <!-- #Initialize it -->
+    {{ ckeditor.config(name='content') }}
     <br><br><br>
   {% else %}
   <h2> Must be loged in </h2>

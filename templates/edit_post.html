@@ -32,8 +32,12 @@ Hey {{name}}!! {{message}}
 
   {{ form.submit(class="btn btn-primary") }}
 
-</form>
-      
+    </form>
+    <!-- #load the ck editor here -->
+    {{ ckeditor.load() }}
+    <!-- #Initialize it -->
+    {{ ckeditor.config(name='content') }}
+
 
       <a href="{{ url_for('posts' )}}" class="btn btn-outline-secondary btn-sm">Back</a>
 
