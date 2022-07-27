@@ -23,6 +23,9 @@ Hey {{name}}!! {{message}}
   <br>
   <form  method="post">
     {{ form.hidden_tag() }}
+    {{ form.user_name.label(class = "form-label") }}
+    {{ form.user_name(class="form-control") }}
+    <br>
     {{ form.name.label(class = "form-label") }}
     {{ form.name(class="form-control") }}
     <br>
@@ -34,6 +37,15 @@ Hey {{name}}!! {{message}}
     {{ form.favorate_colour(class="form-control") }}
     <br>
 
+    {{ form.password_hash.label(class = "form-label") }}
+    {{ form.password_hash(class="form-control") }}
+    <br>
+
+    {{ form.compare_password.label(class = "form-label") }}
+    {{ form.compare_password(class="form-control") }}
+    <br>
+
+
 
     {{ form.submit(class="btn btn-primary") }}
 
@@ -41,7 +53,7 @@ Hey {{name}}!! {{message}}
   <br><br><br>
 
   {% for our_user in our_users %}
-  {{ our_user.id }}.<a href="{{ url_for('update' ,id =our_user.id )}}">{{ our_user.name }}</a>  - {{ our_user.email }} - {{ our_user.favorate_colour }}<br>
+  {{ our_user.id }}.<a href="{{ url_for('update' ,id =our_user.id )}}">{{ our_user.name }}</a>-{{ our_user.user_name }}  - {{ our_user.email }} - {{ our_user.favorate_colour }} - Pw: {{ our_user.password_hash }}- <a href="{{ url_for('delete' ,id =our_user.id )}}">Delete</a><br>
 
   {% endfor%}
 {% endif %}

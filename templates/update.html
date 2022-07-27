@@ -10,21 +10,20 @@ Hey {{name}}!! {{message}}
 </div>
 
 {% endfor %}
+{% if id == current_user.id %}
 
-{% if name %}
-  <h1>Hello {{name}} !!</h1>
-  <br><br>
-
-  <br>
-
-
-{% else %}
   <h1>UPdate User </h1>
+  <br>
+  id to update = {{ id }} <br>
+  current user id = {{ current_user.id }}
   <br>
   <form  action="/update/{{ user_to_update.id }}" method="post">
     {{ form.hidden_tag() }}
     {{ form.name.label(class = "form-label") }}
     {{ form.name(class="form-control" , value = user_to_update.name) }}
+    <br>
+    {{ form.user_name.label(class = "form-label") }}
+    {{ form.user_name(class="form-control" , value = user_to_update.user_name) }}
     <br>
     {{ form.email.label(class = "form-label") }}
     {{ form.email(class="form-control" , value = user_to_update.email) }}
@@ -35,6 +34,9 @@ Hey {{name}}!! {{message}}
 
     {{ form.submit(class="btn btn-primary") }}
 
+
+    <a href="{{ url_for('delete' ,id =user_to_update.id )}}" class = "btn btn-danger">Delete</a>
+
   </form>
   <br><br><br>
 
@@ -42,6 +44,14 @@ Hey {{name}}!! {{message}}
   {{ our_user.id }}.{{ our_user.name }} - {{ our_user.email }} - {{ our_user.favorate_colour}}<br>
 
   {% endfor%}
+
+{% else %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+Hey {{name}}!! soory you cant edir this User
+<h2>Access Denied </h2>
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
 {% endif %}
 
 
