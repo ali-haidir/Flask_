@@ -4,6 +4,13 @@ from wtforms.validators import DataRequired, EqualTo , Length
 from wtforms.widgets import TextArea
 
 
+#create a search form
+class SearchForm(FlaskForm):
+    searched = StringField("searched ", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+
+
 
 #Create a Form Class
 class UserForm(FlaskForm):
@@ -26,7 +33,7 @@ class NamerForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField("title ", validators=[DataRequired()])
     content = StringField("enter content  ", validators=[DataRequired()] , widget = TextArea())
-    author = StringField("whats the author name ", validators=[DataRequired()])
+    author = StringField("whats the author name ")
     slug = StringField("slug ", validators=[DataRequired()])
     submit = SubmitField("submit")
 

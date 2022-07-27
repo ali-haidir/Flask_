@@ -8,7 +8,7 @@ from flask_login import UserMixin,login_user,LoginManager,login_required,logout_
 
 #referenceing the forms now after shifting them to anouther file
 from webforms import *
-# from webforms import UserForm,NamerForm,PostForm,PasswordForm,LoginForm
+# from webforms import UserForm,NamerForm,PostForm,PasswordForm,LoginForm,SearchForm
 
 
 #create a flask instance
@@ -42,9 +42,11 @@ class Posts(db.Model):
     id = db.Column(db.Integer ,primary_key = True)
     title = db.Column(db.String(255))
     content = db.Column(db.Text)
-    author = db.Column(db.String(59))
+#    author = db.Column(db.String(59))
     date_posted = db.Column(db.DateTime , default = datetime.utcnow)
     slug = db.Column(db.String(255))
+    #foreign key to link users (refer to the primary key of the users )
+    poster_id = db.Column(db.Integer , db.ForeignKey('users.id'))
 
 # Json Thing ( returning json )
 @app.route('/date')
@@ -69,6 +71,8 @@ class Users(db.Model,UserMixin):
 
     # do some password stuff
     password_hash = db.Column(db.String(128))
+    #user can have many post
+    posts = db.relationship('Posts' , backref = 'poster')
 
     @property
     def password(self):
@@ -89,6 +93,25 @@ class Users(db.Model,UserMixin):
 # @app.route('/')
 # def index():
 #     return "<h1>Hello world from codemy! </h1>"
+
+#add stuff to the navbar
+@app.context_processor
+def base_file():
+    form = SearchForm()
+    return dict(form = form )
+
+#create Search function
+@app.route('/search' , methods = ['POST'])
+def search():
+    form = SearchForm()
+    posts = Posts.query
+    if form.validate_on_submit():
+        #get data from submited form
+        post.searched = form.searched.data
+        #query the database on the input from searched field
+        posts = posts.filter(Posts.content.like('%' + post.searched + '%'))
+        posts = posts.order_by(Posts.title).all()
+        return render_template('search.html' , form = form , searched = post.searched , posts = posts)
 
 # create login page
 @app.route('/login', methods = ['GET' , 'POST'])
@@ -233,13 +256,13 @@ def user(name):
 def add_post():
     form = PostForm()
 
-
     if form.validate_on_submit():
-        post = Posts(title = form.title.data, content = form.content.data , author = form.author.data , slug = form.slug.data)
+        poster = current_user.id
+        post = Posts(title = form.title.data,poster_id = poster , content = form.content.data  , slug = form.slug.data)
 #           clear the form
         form.title.data = ''
         form.content.data = ''
-        form.author.data = ''
+        # form.author.data = ''
         form.slug.data = ''
         # add post data to database
         db.session.add(post)
@@ -275,7 +298,7 @@ def edit_post(id):
     form = PostForm()
     if form.validate_on_submit():
         post.title = form.title.data
-        post.author = form.author.data
+        # post.author = form.author.data
         post.slug = form.slug.data
         post.content = form.content.data
         # update Database
@@ -284,30 +307,44 @@ def edit_post(id):
         flash("post has be updated ")
 
         return redirect(url_for('post' , id= post.id))
-    form.title.data = post.title
-    form.author.data = post.author
-    form.slug.data = post.slug
-    form.content.data = post.content
-    return render_template('edit_post.html' , form = form)
+    # print("poster_id = " , post.poster_id)
+    # print("id = " , id)
+    # print("poster.id = " , post.poster.id)
+    if current_user.id == post.poster_id:
+        form.title.data = post.title
+        # form.author.data = post.poster.id
+        form.slug.data = post.slug
+        form.content.data = post.content
+        return render_template('edit_post.html' , form = form)
+    else:
+        flash(" You arnt Autherized to visit this page ")
+        return redirect(url_for('posts') )
 
 
 @app.route('/posts/delete/<int:id>')
+@login_required
 def delete_post(id):
     post = Posts.query.get_or_404(id)
+    if post.poster.id  == current_user.id:
+        try:
+            db.session.delete(post)
+            db.session.commit()
+            flash("blog post deleted ")
 
-    try:
-        db.session.delete(post)
-        db.session.commit()
-        flash("blog post deleted ")
+            posts = Posts.query.order_by(Posts.date_posted)
+            return render_template('posts.html' , posts = posts)
 
+        except:
+            flash("somthing went wrong")
+            #grab all the posts from database
+            posts = Posts.query.order_by(Posts.date_posted)
+            return render_template('posts.html' , posts = posts)
+    else:
+        flash(" You cannot delete this post ")
+        flash("Access Denied ")
         posts = Posts.query.order_by(Posts.date_posted)
         return render_template('posts.html' , posts = posts)
 
-    except:
-        flash("somthing went wrong")
-        posts = Posts.query.order_by(Posts.date_posted)
-
-        return render_template('posts.html' , posts = posts)
 
 # Filters
 #safe

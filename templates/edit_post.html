@@ -20,9 +20,7 @@ Hey {{name}}!! {{message}}
   {{ form.title.label(class = "form-label") }}
   {{ form.title(class="form-control") }}
   <br>
-  {{ form.author.label(class = "form-label") }}
-  {{ form.author(class="form-control") }}
-  <br>
+
 
   {{ form.slug.label(class = "form-label") }}
   {{ form.slug(class="form-control") }}
@@ -35,7 +33,7 @@ Hey {{name}}!! {{message}}
   {{ form.submit(class="btn btn-primary") }}
 
 </form>
-      <br>
+      
 
       <a href="{{ url_for('posts' )}}" class="btn btn-outline-secondary btn-sm">Back</a>
 

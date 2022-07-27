@@ -15,8 +15,8 @@ Hey {{name}}!! {{message}}
 <br>
 
 {% for post in posts %}
-      <h2>{{ post.title }}</h2><br>
-      {{ post.author }}<br>
+      <h2>{{ post.title }}</h2>
+       By :{{ post.poster.name }}<br>
       Slug : {{ post.slug }}<br>
       {{ post.date_posted}} <br>
       {{ post.content }}<br>
@@ -24,9 +24,15 @@ Hey {{name}}!! {{message}}
       <br>
       <a href="{{ url_for('post' ,id=post.id )}}" class="btn btn-outline-secondary btn-sm">View Post</a>
 
+
+      {% if current_user.id == post.poster.id %}
+
       <a href="{{ url_for('edit_post' ,id=post.id )}}" class="btn btn-outline-secondary btn-sm">edit Post</a>
 
       <a href="{{ url_for('delete_post' ,id=post.id )}}" class="btn btn-outline-danger btn-sm">Delete</a>
+
+
+      {% endif %}
       <hr><br>
 
 
