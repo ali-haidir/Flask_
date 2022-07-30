@@ -22,11 +22,26 @@ Hey {{name}}!! {{message}}
     <h5 class="card-title">{{ current_user.name }}</h5>
     <h6 class="card-title">{{ current_user.date_added }}</h6>
     <p class="card-text">{{ current_user.email }}</p>
+    <div class="container">
+      <div class="row">
+        <div class="col-8">
+
     <a href="{{ url_for('logout') }}" class="btn btn-primary btn-sm" >Logout</a>
 
     <a href="{{ url_for('update' , id = current_user.id) }}" class="btn btn-primary btn-sm" >Update Profile</a>
 
     <a href="{{ url_for('delete'  ,id = current_user.id)}}" class="btn btn-danger btn-sm" >Delete</a>
+
+
+      </div>
+      <div class="col-4">
+        <img src="{{ url_for('static', filename ='images/placeholder.jpg')}}" width="150" alt="" align = "right">
+      </div>
+
+
+</div>
+
+</div>
   </div>
 </div>
 <br>
