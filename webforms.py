@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField,PasswordField,BooleanField,ValidationError
+from wtforms import StringField,SubmitField,PasswordField,BooleanField,ValidationError,TextAreaField
 from wtforms.validators import DataRequired, EqualTo , Length
 from wtforms.widgets import TextArea
 from flask_ckeditor import CKEditorField
+from flask_wtf.file import FileField
 
 
 
@@ -23,6 +24,12 @@ class UserForm(FlaskForm):
     password_hash = PasswordField("password" , validators = [DataRequired() , EqualTo('compare_password', message = 'Password must Match!! ')])
     compare_password = PasswordField('Confirm Password' , validators = [DataRequired()])
     submit = SubmitField("Submit")
+    about_author = TextAreaField("About Author")
+
+    # picture field
+    profile_pic = FileField("Profile Pic")
+
+
 
 
 

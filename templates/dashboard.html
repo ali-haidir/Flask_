@@ -21,7 +21,9 @@ Hey {{name}}!! {{message}}
   <div class="card-body">
     <h5 class="card-title">{{ current_user.name }}</h5>
     <h6 class="card-title">{{ current_user.date_added }}</h6>
+    <p class="card-text">{{ current_user.about_author }}</p>
     <p class="card-text">{{ current_user.email }}</p>
+    <p class="card-text">profile pic:  {{ current_user.profile_pic }}</p>
     <div class="container">
       <div class="row">
         <div class="col-8">
@@ -45,8 +47,12 @@ Hey {{name}}!! {{message}}
   </div>
 </div>
 <br>
-<form  action="/dashboard" method="post">
+<form  action="/dashboard" method="post" enctype="multipart/form-data">
   {{ form.hidden_tag() }}
+  <br>
+  {{ form.profile_pic.label(class = "form-label") }}
+  {{ form.profile_pic(class="form-control" , value = user_to_update.profile_pic) }}
+  <br>
   {{ form.name.label(class = "form-label") }}
   {{ form.name(class="form-control" , value = user_to_update.name) }}
   <br>
@@ -58,6 +64,14 @@ Hey {{name}}!! {{message}}
   <br>
   {{ form.favorate_colour.label(class = "form-label") }}
   {{ form.favorate_colour(class="form-control" , value = user_to_update.favorate_colour) }}
+  <br>
+
+
+
+
+  <textarea name="about_author" class="form-contro" rows="5" >
+        {{ user_to_update.about_author }}
+  </textarea>
   <br>
 
   {{ form.submit(class="btn btn-primary") }}

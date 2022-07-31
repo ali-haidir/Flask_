@@ -19,6 +19,9 @@ Hey {{name}}!! {{message}}
       By: {{ post.poster.name }}<br>
       Slug : {{ post.slug }}<br>
       {{ post.date_posted}} <br>
+      {% if post.poster.about_author %}
+        About Author: {{post.poster.about_author}} <br>
+      {% endif %}
       {{ post.content|safe }}<br>
       <br>
 

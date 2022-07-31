@@ -5,7 +5,9 @@ from datetime import datetime,date
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask import jsonify
 from flask_login import UserMixin,login_user,LoginManager,login_required,logout_user,current_user
-
+from werkzeug.utils import secure_filename
+import uuid as uuid
+import os
 #referenceing the forms now after shifting them to anouther file
 from webforms import *
 # from webforms import UserForm,NamerForm,PostForm,PasswordForm,LoginForm,SearchForm
@@ -32,6 +34,10 @@ migrate = Migrate(app,db)
 
 # my super secret SECRET_KEY
 app.config['SECRET_KEY'] = "my super secret key"
+
+#  to save the image in the folder static/images
+UPLOAD_FOLDER = "static/images/"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 # flask login Stuff
@@ -74,6 +80,10 @@ class Users(db.Model,UserMixin):
     email = db.Column(db.String(100),nullable=False,unique = True)
     favorate_colour = db.Column(db.String(30))
     date_added = db.Column(db.DateTime,default = datetime.utcnow)
+    about_author = db.Column(db.Text(500) , nullable = True)
+
+    # adding profile field strinf field
+    profile_pic = db.Column(db.String(500) , nullable = True)
 
     # do some password stuff
     password_hash = db.Column(db.String(128))
@@ -166,13 +176,28 @@ def dashboard():
     form = UserForm()
     id = current_user.id
     user_to_update = Users.query.get_or_404(id)
-    print("somthing happened 2")
+
     if request.method == "POST":
         user_to_update.name = request.form['name']
         user_to_update.email = request.form['email']
         user_to_update.favorate_colour = request.form['favorate_colour']
         user_to_update.user_name = request.form['user_name']
-        print("somthing happened")
+        user_to_update.about_author = request.form['about_author']
+        user_to_update.profile_pic = request.files['profile_pic']
+
+        #grab image name
+        pic_filename = secure_filename(user_to_update.profile_pic.filename)
+
+        # for uuid (unique user id  setting it )
+        pic_name = str(uuid.uuid1()) + "_" + pic_filename
+
+        # save the image to static folder with the help of os
+    #    user_to_update.profile_pic.save(os.path.join(app.config['UPLOAD_FOLDER']) , pic_name)
+
+        # saving pic name to database
+        user_to_update.profile_pic = pic_name
+
+
         try:
             db.session.commit()
             flash("USER UPDATED SUCCESSFULLY!!")
@@ -220,6 +245,7 @@ def update(id):
         user_to_update.email = request.form['email']
         user_to_update.favorate_colour = request.form['favorate_colour']
         user_to_update.user_name = request.form['user_name']
+        user_to_update.about_author = request.form['about_author']
         print("somthing happened")
         try:
             db.session.commit()
