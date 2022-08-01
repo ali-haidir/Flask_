@@ -265,6 +265,7 @@ def update(id):
         print("somthing happened")
         try:
             db.session.commit()
+            print("test")
             flash("USER UPDATED SUCCESSFULLY!!")
             return render_template("update.html", form=form, user_to_update=user_to_update)
 
